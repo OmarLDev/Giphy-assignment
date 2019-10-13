@@ -7,6 +7,17 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        .text-block {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: black;
+            color: white;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    </style>
 </head>
 <body class="container">
     <div class="row">
@@ -15,7 +26,10 @@
     <div class="row">
         <div class="col-lg-6" id="images"></div>
         <div class="col-lg-6" id="animalsForm">
-
+            <form id="newAnimal">
+                <input type="text" id="animalName" size="20" name="animalInput">
+                <button id="addAnimal">Add Animal</button>
+            </form>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -23,12 +37,17 @@
 
     $(document).ready(function(){
         var baseURL = "https://api.giphy.com/v1/gifs/search?api_key=h2Siwo7daiaDZj9YYeJ790lgAG8zBHT7&limit=10&q=";
-        var search = "";
+        var offset = 0;
         var animals = ["dog", "cat", "hedgehog", "skunk", "horse", "pidgeon", "rat"];
 
         createButtons();
 
-        $(".animal").on("click",function(){
+        $("#addAnimal").on("click", function(event){
+            event.preventDefault();
+            addButton($("#animalName").val().trim());
+        });
+
+        function getAnimalImages(){
             $.ajax({
                 url : baseURL + $(this).attr("id"),
                 method: "GET"
@@ -44,7 +63,7 @@
                     $("#images").append(image);
                 }
             });
-        });
+        };
 
         function animateGif(){
             var state = $(this).attr("data-state");
@@ -59,14 +78,18 @@
 
         function createButtons(){
             animals.forEach(element => {
-                var button = $("<button>");
-                button.addClass("animal");
-                button.attr("id",element);
-                button.text(element);
-                $("#buttons").append(button);
+                addButton(element);
             });
         }
 
+        function addButton(animal){
+            var button = $("<button>");
+            button.addClass("animal");
+            button.attr("id",animal);
+            button.text(animal);
+            button.on("click",getAnimalImages);
+            $("#buttons").append(button);
+        }
     });
     </script>
 </body>
