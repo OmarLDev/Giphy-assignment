@@ -20,38 +20,54 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-    var baseURL = "https://api.giphy.com/v1/gifs/search?api_key=h2Siwo7daiaDZj9YYeJ790lgAG8zBHT7&limit=10&q=";
-    var search = "";
-    var animals = ["dog", "cat", "hedgehog", "skunk", "horse", "pidgeon", "rat"];
 
-    createButtons();
+    $(document).ready(function(){
+        var baseURL = "https://api.giphy.com/v1/gifs/search?api_key=h2Siwo7daiaDZj9YYeJ790lgAG8zBHT7&limit=10&q=";
+        var search = "";
+        var animals = ["dog", "cat", "hedgehog", "skunk", "horse", "pidgeon", "rat"];
 
-    $(".animal").on("click",function(){
-        $.ajax({
-            url : baseURL + $(this).attr("id"),
-            method: "GET"
-        }).then(function(response){
-            for(var i = 0; i < response.pagination.count; i++){
-                console.log(response.data[i].images.original_still.url);
-                var image = $("<img>");
-                image.attr("src",response.data[i].images.original_still.url);
-                image.attr("data-still",response.data[i].images.original_still.url);
-                image.attr("data-animate",response.data[i].images.original.url);
-                image.attr("still",true);
-                $("#images").append(image);
+        createButtons();
+
+        $(".animal").on("click",function(){
+            $.ajax({
+                url : baseURL + $(this).attr("id"),
+                method: "GET"
+            }).then(function(response){
+                for(var i = 0; i < response.pagination.count; i++){
+                    var image = $("<img>");
+                    image.attr("src",response.data[i].images.fixed_width_still.url);
+                    image.attr("data-still",response.data[i].images.fixed_width_still.url);
+                    image.attr("data-animate",response.data[i].images.fixed_width.url);
+                    image.attr("data-state","still");
+                    image.addClass("gif");
+                    image.on("click",animateGif);
+                    $("#images").append(image);
+                }
+            });
+        });
+
+        function animateGif(){
+            var state = $(this).attr("data-state");
+            if(state === "still"){
+                $(this).attr("src",$(this).attr("data-animate"));
+                $(this).attr("data-state","animate");
+            }else if(state === "animate"){
+                $(this).attr("src",$(this).attr("data-still"));
+                $(this).attr("data-state","still");
             }
-        });
-    });
+        };
 
-    function createButtons(){
-        animals.forEach(element => {
-            var button = $("<button>");
-            button.addClass("animal");
-            button.attr("id",element);
-            button.text(element);
-            $("#buttons").append(button);
-        });
-    }
+        function createButtons(){
+            animals.forEach(element => {
+                var button = $("<button>");
+                button.addClass("animal");
+                button.attr("id",element);
+                button.text(element);
+                $("#buttons").append(button);
+            });
+        }
+
+    });
     </script>
 </body>
 </html>
