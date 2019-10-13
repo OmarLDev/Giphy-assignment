@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body class="container">
+    <div class="row">
+        <div id="buttons"></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6" id="images"></div>
+        <div class="col-lg-6" id="form"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+    var baseURL = "https://api.giphy.com/v1/gifs/search?api_key=h2Siwo7daiaDZj9YYeJ790lgAG8zBHT7&limit=10&q=";
+    var search = "";
+    var animals = ["dog", "cat", "hedgehog", "skunk", "horse", "pidgeon", "rat"];
+
+    createButtons();
+
+    function createButtons(){
+        animals.forEach(element => {
+            var button = $("<button>");
+            button.attr("id",element);
+            button.text(element);
+            $("#buttons").append(button);
+        });
+    }
+    </script>
+</body>
+</html>
